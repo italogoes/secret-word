@@ -1,8 +1,11 @@
 import '../../assets/styles/End.css'
 
-const End = () => {
+const End = ({reiniciar}) => {
   return (
-    <div>End</div>
+    <div>
+      <h2>Fim de jogo</h2>
+      <button onClick={reiniciar}>Reiniciar</button>
+    </div>
   )
 }
 
