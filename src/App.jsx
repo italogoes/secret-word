@@ -13,18 +13,21 @@ import Game from './components/Game/Game'
 import End from './components/End/End'
 
 const estagios = [
-  {id: 1, name: 'start'},
-  {id: 2, name: 'game'},
-  {id: 3, name: 'end'},
+  { id: 1, name: 'start' },
+  { id: 2, name: 'game' },
+  { id: 3, name: 'end' },
 ]
 
 function App() {
   const [gameEstagio, setGameEstagio] = useState(estagios[0].name)
   const [words] = useState(wordList)
-
   const [pickedWord, setPickedWord] = useState('')
   const [pickedCategory, setPickedCategory] = useState('')
   const [letters, setLetters] = useState([])
+  const [guessedLetters, setGuessedLetters] = useState([])
+  const [wrongLetters, setWrongLetters] = useState([])
+  const [guesses, setGuesses] = useState(3)
+  const [score, setScore] = useState(0)
 
   const pickWordAndPickCategory = () => {
     // pegando uma categoria aleatoria
@@ -37,9 +40,9 @@ function App() {
     console.log(category)
     console.log(word)
 
-    return {word, category}
+    return { word, category }
   }
-  
+
   // Função para iniciar o jogo
   const startGame = () => {
     // pegar palavra e categoria
@@ -57,15 +60,15 @@ function App() {
     // setar os estados
     setPickedWord(word)
     setPickedCategory(category)
-    setLetters(letters)
+    setLetters(wordLetters)
 
 
     setGameEstagio(estagios[1].name)
   }
 
   // Processar a letra digitada
-  const verificarLetra = () => {
-    setGameEstagio(estagios[2].name)
+  const verificarLetra = (letter) => {
+    console.log(letter)
   }
 
   // Reiniciar o jogo quando terminar ou seja, resetar todos os states
@@ -75,9 +78,18 @@ function App() {
 
   return (
     <div className="App">
-      {gameEstagio === 'start' && <StartScreen startGame={startGame}/>}
-      {gameEstagio === 'game' && <Game verificarLetra={verificarLetra} />}
-      {gameEstagio === 'end' && <End reiniciar={reiniciar}/>}
+      {gameEstagio === 'start' && <StartScreen startGame={startGame} />}
+      {gameEstagio === 'game' && 
+        <Game 
+          verificarLetra={verificarLetra} 
+          pickedWord={pickedWord} 
+          pickedCategory={pickedCategory} 
+          letters={letters} 
+          wrongLetters={wrongLetters}
+          guessedLetters={guessedLetters}
+          guesses={guesses}
+          score={score}/>}
+      {gameEstagio === 'end' && <End reiniciar={reiniciar} />}
     </div>
   )
 }
