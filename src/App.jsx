@@ -45,6 +45,9 @@ function App() {
 
   // Função para iniciar o jogo
   const startGame = () => {
+    // resetando antes de começar
+    setGuessedLetters('')
+
     // pegar palavra e categoria
     const { word, category } = pickWordAndPickCategory()
 
@@ -68,11 +71,56 @@ function App() {
 
   // Processar a letra digitada
   const verificarLetra = (letter) => {
-    console.log(letter)
+    const normalizedLetter = letter.toLowerCase()
+
+    if(
+    guessedLetters.includes(normalizedLetter) || 
+    wrongLetters.includes(normalizedLetter)
+    ) {
+      return
+    }
+
+    if(letters.includes(normalizedLetter)) {
+      setGuessedLetters((actualGuessedLetters) => [
+        ...actualGuessedLetters,
+        normalizedLetter
+      ])
+    } else {
+      setWrongLetters((actualWrongLetters) => [
+        ...actualWrongLetters,
+        normalizedLetter
+      ])
+
+      setGuesses((actualGuesses) => actualGuesses -1)
+
+      
+    }
   }
+
+  useEffect(() => {
+
+    if(guesses <= 0) {
+      setGameEstagio(estagios[2].name)
+    }
+  }, [guesses])
+
+  useEffect(() => {
+    const uniqueLetters = [...new Set(letters)]
+
+    if(guessedLetters.length === uniqueLetters.length){
+      setScore((actualScore) => actualScore += 100)
+      startGame()
+    }
+
+    console.log(uniqueLetters)
+  }, [guessedLetters])
 
   // Reiniciar o jogo quando terminar ou seja, resetar todos os states
   const reiniciar = () => {
+    setScore(0)
+    setGuesses(3)
+    setGuessedLetters([])
+
     setGameEstagio(estagios[0].name)
   }
 
@@ -89,7 +137,7 @@ function App() {
           guessedLetters={guessedLetters}
           guesses={guesses}
           score={score}/>}
-      {gameEstagio === 'end' && <End reiniciar={reiniciar} />}
+      {gameEstagio === 'end' && <End reiniciar={reiniciar} score={score}/>}
     </div>
   )
 }

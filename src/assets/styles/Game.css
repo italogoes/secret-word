@@ -58,3 +58,8 @@
     text-align: center;
     margin-right: 1em;
 }
+
+.wrongLettersContainer{
+    margin-top: 20px;
+    font-size: 23px;
+}
